@@ -83,6 +83,7 @@ def read_exisiting_nodes():
 
 if __name__ == '__main__':
 
+    # Should be 509 citibikes
     # citiStations = get_citiBike_stations()
     # Raymond Run machine learning on citiStations
 
@@ -90,6 +91,10 @@ if __name__ == '__main__':
     existing_nodes = []
 
     new_nodes = read_new_nodes()
+
+    # for node in new_nodes[:10]:
+    #   For the get near_by_venues => only 500 requests per hour.
+    #     node.calculate_desireability()
 
     existing_nodes = read_exisiting_nodes()
 

@@ -1,4 +1,6 @@
 import math
+import requests
+import foursquare
 
 class Node:
     def __init__(self, location, does_exist):
@@ -54,7 +56,16 @@ class Node:
 
 
     def get_nearby_venues(self):
-        """Gets nearby venues"""
+        """Gets nearby venues within a 100 meter radius"""
+
+        client_id = "UDGDHLG2KHK0A3U1KWZQ0WBEWOG0W3X0HTC0OVIGLQNSHNL2"
+        client_secret = "HWDWNMI0FAW34FIDJL1LDY5VXMMRNRJM5VY15A0310JQI0MH"
+        client = foursquare.Foursquare(client_id, client_secret)
+
+        ll = str(self.location[1]) + "," + str(self.location[0])
+        rad = 100 # Radius in meters
+        resp = client.venues.search(params={'rad': str(rad), "ll" : ll})
+        return len(resp["venues"])
 
     def get_pedestrian_flow(self):
         """Gets nearby pedestrian flow"""
