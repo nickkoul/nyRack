@@ -82,7 +82,9 @@ def read_exisiting_nodes():
     return existing_nodes
 
 if __name__ == '__main__':
-    print "nyRack"
+
+    # citiStations = get_citiBike_stations()
+    # Raymond Run machine learning on citiStations
 
     new_nodes = []
     existing_nodes = []
