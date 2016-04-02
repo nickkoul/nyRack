@@ -40,8 +40,14 @@ function addMarker(latlong, color) {
 //     addMarker(data[i], "#44c6f8");
 //   }
 // });
+//
+// $.getJSON("http://localhost:5000/new", function(data) {
+//   for (var i=0; i<data.length; ++i) {
+//     addMarker(data[i], "#44c6f8");
+//   }
+// });
 
-$.getJSON("http://localhost:5000/new", function(data) {
+$.getJSON("http://localhost:5000/citibike", function(data) {
   for (var i=0; i<data.length; ++i) {
     addMarker(data[i], "#44c6f8");
   }

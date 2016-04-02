@@ -1,4 +1,4 @@
-import main, json
+import main, learn, json
 from flask import Flask, jsonify, request
 
 app = Flask(__name__, static_url_path='')
@@ -10,8 +10,8 @@ def root():
 @app.route('/citibike', methods=['GET'])
 def get_citibike():
     citi_nodes = main.get_citiBike_stations()
-    citi_nodes = list(map(lambda node: (node.location[1],
-                                        node.location[0]), citi_nodes))
+    citi_nodes = list(map(lambda tuple: (tuple[0].node.location[1],
+                                         tuple[0].node.location[0]), citi_nodes))
     return json.dumps(citi_nodes)
 
 @app.route('/new', methods=['GET'])
