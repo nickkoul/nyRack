@@ -1,3 +1,5 @@
+import math
+
 class Node:
     def __init__(self, location, does_exist):
         """
@@ -26,6 +28,30 @@ class Node:
 
     def get_nearby_accidents(self):
         """Gets nearby accidents"""
+        """Earth Radius 6371 km"""
+        xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
+        ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
+
+        """ stored as (long,lat,injured,killed) """
+        accident_points = []
+
+        f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")
+        i=0
+        for line in f:
+            line = line.strip()
+            line = line.split(',')
+            if len(line)==30 and i!=0:
+                #print i
+                #print line
+                if line[4]!=''and line[5] != '' and line[14] != '' and line[15] != '':
+                    if int(line[14])>0 or int(line[15])>0:
+                        point = (float(line[4]),float(line[5]),int(line[14]),int(line[15]))
+                        accident_points.append(point)
+            i+=1
+
+        print len(accident_points)
+
+
 
     def get_nearby_venues(self):
         """Gets nearby venues"""

@@ -94,3 +94,6 @@ if __name__ == '__main__':
     existing_nodes = read_exisiting_nodes()
 
     print"%d + %d = %d"%(len(new_nodes),len(existing_nodes),len(new_nodes)+len(existing_nodes))
+
+    print existing_nodes[0].location
+    existing_nodes[0].get_nearby_accidents()
