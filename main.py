@@ -50,7 +50,7 @@ def read_new_nodes():
                 lon = float(line[44:54])
             else:
                 print"ERROR IN READING FILE"
-            loc = (lat,lon)
+            loc = (lon,lat)
             new_nodes.append(node.Node(location=loc,does_exist=False))
 
     f.close() # close the new node input file
@@ -74,7 +74,7 @@ def read_exisiting_nodes():
             if line[3] !='' or line[4] !='':
                 lon = float(line[3])
                 lat = float(line[4])
-                loc = (lat,lon)
+                loc = (lon,lat)
                 existing_nodes.append(node.Node(location=loc,does_exist=True))
 
     f.close() # close the existing node file
