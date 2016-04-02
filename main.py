@@ -28,13 +28,10 @@ def get_citiBike_stations():
         stations.append( (station, station.get_total_diff()))
 
     return stations
-    
-if __name__ == '__main__':
-    print "nyRack"
 
+def read_new_nodes():
     f = open("map","r") # open the new node input file
     new_nodes=[]
-    existing_nodes = []
     for line in f:
         line = line.strip()
 
@@ -58,8 +55,12 @@ if __name__ == '__main__':
 
     f.close() # close the new node input file
 
+    return new_nodes
 
+def read_exisiting_nodes():
     f = open("existing_rack.csv","r")
+
+    existing_nodes=[]
 
     for line in f:
         line = line.strip()
@@ -77,3 +78,17 @@ if __name__ == '__main__':
                 existing_nodes.append(node.Node(location=loc,does_exist=True))
 
     f.close() # close the existing node file
+
+    return existing_nodes
+
+if __name__ == '__main__':
+    print "nyRack"
+
+    new_nodes = []
+    existing_nodes = []
+
+    new_nodes = read_new_nodes()
+
+    existing_nodes = read_exisiting_nodes()
+
+    print"%d + %d = %d"%(len(new_nodes),len(existing_nodes),len(new_nodes)+len(existing_nodes))
