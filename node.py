@@ -5,7 +5,6 @@ class Node:
         """
         self.location = location
         self.does_exist = does_exist
-        self.desireability = self.calculate_desireability()
 
     def calculate_desireability(self):
         """

@@ -1,5 +1,34 @@
 import node
+from citiStation import CitiStation
+import csv
 
+def get_citiBike_stations():
+    """ Parse citibike data into nodes w/ features and value  """
+    citiStations = {}
+    with open('data/citibike/station-data.csv', 'rb') as stationDataFile:
+        citiBikeStations = csv.reader(stationDataFile, delimiter=',', quoting=csv.QUOTE_NONE)
+        for station in citiBikeStations:
+            location = (station[5], station[6])
+            does_exist = True
+            stationId = station[0]
+            citiStations[stationId] = CitiStation(stationId, location, does_exist)
+
+    stationStatus = []
+    with open('data/citibike/station-status.csv', 'rb') as stationStatusFile:
+        citiBikeStatus = csv.reader(stationStatusFile, delimiter=',', quoting=csv.QUOTE_NONE)
+        for status in citiBikeStatus:
+            stationId = status[0]
+            availibleDocks = status[2]
+            totalDocks = status[3]
+            time = status[1]
+            citiStations[stationId].add_dock_status(availibleDocks, totalDocks)
+
+    stations = []
+    for key, station in citiStations.iteritems():
+        stations.append( (station, station.get_total_diff()))
+
+    return stations
+    
 if __name__ == '__main__':
     print "nyRack"
 
