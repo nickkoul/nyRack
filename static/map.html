@@ -32,14 +32,23 @@ function addMarker(latlong, color) {
         'marker-color': color
       })
   });
+  marker.addTo(map);
+}
+
+function addMarkerToClusters(latlong, color) {
+  var marker = L.marker(latlong, {
+      icon: L.mapbox.marker.icon({
+        'marker-color': color
+      })
+  });
   markers.addLayer(marker);
 }
 
-// $.getJSON("http://localhost:5000/existing", function(data) {
-//   for (var i=0; i<data.length; ++i) {
-//     addMarker(data[i], "#44c6f8");
-//   }
-// });
+$.getJSON("http://localhost:5000/existing", function(data) {
+  for (var i=0; i<data.length; ++i) {
+    addMarkerToClusters(data[i], "#44c6f8");
+  }
+});
 //
 // $.getJSON("http://localhost:5000/new", function(data) {
 //   for (var i=0; i<data.length; ++i) {
@@ -47,11 +56,17 @@ function addMarker(latlong, color) {
 //   }
 // });
 
-$.getJSON("http://localhost:5000/citibike", function(data) {
-  for (var i=0; i<data.length; ++i) {
-    addMarker(data[i], "#44c6f8");
-  }
-});
+// $.getJSON("http://localhost:5000/citibike", function(data) {
+//   for (var i=0; i<data.length; ++i) {
+//     addMarker(data[i], "#44c6f8");
+//   }
+// });
+
+// $.getJSON("http://localhost:5000/k", function(data) {
+//   for (var i=0; i<data.length; ++i) {
+//     addMarker(data[i], "#953532");
+//   }
+// });
 
 map.addLayer(markers);
 
