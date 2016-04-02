@@ -3,10 +3,9 @@ import node
 if __name__ == '__main__':
     print "nyRack"
 
-    f = open("map","r") # make this the Input File
-
+    f = open("map","r") # open the new node input file
     new_nodes=[]
-    i=0
+    existing_nodes = []
     for line in f:
         line = line.strip()
 
@@ -28,4 +27,24 @@ if __name__ == '__main__':
             loc = (lat,lon)
             new_nodes.append(node.Node(location=loc,does_exist=False))
 
-        i+=1
+    f.close() # close the new node input file
+
+
+    f = open("existing_rack.csv","r")
+
+    for line in f:
+        line = line.strip()
+
+        if len(line)>28 and str(line[:28])=="</div>\",#Style2-point-1-map,":
+            lat = 0
+            lon = 0
+            # need to deal with multiple digit racks
+            line = line.split(',')
+
+            if line[3] !='' or line[4] !='':
+                lon = float(line[3])
+                lat = float(line[4])
+                loc = (lat,lon)
+                existing_nodes.append(node.Node(location=loc,does_exist=True))
+
+    f.close() # close the existing node file
