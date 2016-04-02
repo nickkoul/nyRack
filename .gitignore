@@ -1,2 +1,6 @@
 *.pyc
 .DS_Store
+map
+test_input.xml
+existing_rack.csv
+data

@@ -1,11 +1,10 @@
 class Node:
     def __init__(self, location, does_exist):
         """
-        location: (lat, long)
+        location: (long, lat)
         """
         self.location = location
         self.does_exist = does_exist
-        self.desireability = self.calculate_desireability()
 
     def calculate_desireability(self):
         """
