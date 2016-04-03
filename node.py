@@ -2,6 +2,7 @@ import math
 import requests
 import foursquare
 import util
+import numpy as np
 
 class Node:
     def __init__(self, location, does_exist):
@@ -34,7 +35,7 @@ class Node:
         """Earth Radius 6371 km"""
         xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
         ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-        threshold = 256 # the size of a block in manhattan
+
         """ stored as (long,lat,injured,killed) """
         accident_points = []
 
@@ -52,20 +53,7 @@ class Node:
                         accident_points.append(point)
             i+=1
 
-
-        result = 0
-        for point in accident_points:
-            xcord_accident = (6371*1000)*math.cos((point[0]*2*math.pi)/float(360))
-            ycord_accident = (6371*1000)*math.sin((point[1]*2*math.pi)/float(360))
-
-            if math.sqrt((xcord_accident-xcord_self)**2 +(ycord_accident-ycord_self)**2)<threshold:
-                result = result + point[2] + point[3]
-
-        return result
-
-
-
-
+        print len(accident_points)
 
 
 
@@ -92,22 +80,21 @@ class Node:
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
         subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
+        xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
+        ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
+        pt = np.array([xcord_self, ycord_self])
 
-        def distances(a, b):
-            return numpy.linalg.norm(a-b)
+        def distances(a):
+            return np.linalg.norm(a-pt)
 
         vfunc = np.vectorize(distances)
-        ans = vfunc(currentPoints, np.array([self.location[0], self.location[1]]))
-
-        # if(len(util.Subways) == 0):
-        #     util.set_Subways()
-        # else:
-        #     print("was changed!")
-
-        # subwayStops = {}
-        # with open('data/transit/subway/stops.txt') as fp:
-        #     for line in fp:
-        #         print line
+        # print(distances(subways[0], np.array([xcord_self, ycord_self])))
+        data = np.array([np.linalg.norm(a-pt) for a in subways])
+        # print(data[:10])
+        # ans = np.where( data < 100  )
+        # print(len(data))
+        # return 1
+        pass
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
