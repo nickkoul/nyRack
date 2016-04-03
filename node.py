@@ -39,7 +39,6 @@ class Node:
             util.Util().set_Accidents()
         accident_points = util.Util().AccidentCords
         accident_results = util.Util().AccidentResults
-        # print("accidents", len(accident_points))
         result = 0
         dist = 0
         mindist = 1000000
@@ -47,7 +46,6 @@ class Node:
                 dist = math.sqrt(((self.location[0]-accident_points[i][0])**2) + ((self.location[1]-accident_points[i][1])**2))
                 if dist<threshold:
                     result = result + accident_results[i]
-        # print result
         return result
 
     def get_nearby_venues(self):
@@ -93,6 +91,15 @@ class Node:
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
+
+        if not isinstance(util.Util().Existing_Nodes, spatial.ckdtree.cKDTree):
+            util.Util().set_Exisiting_Nodes()
+
+        pt = [self.location[0], self.location[1]]
+        existing_nodes = util.Util().Existing_Nodes
+
+        neightboring_nodes = existing_nodes.query(pt, k=4)
+        return sum(neightboring_nodes[0])
 
 # if __name__ == '__main__':
 #     n = Node((-73.9808623, 40.7587442), True)

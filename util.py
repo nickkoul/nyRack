@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from scipy import spatial
+import node
 
 def get_Subways():
     return Subways
@@ -20,6 +21,7 @@ class Util(object):
         self.Busses = []
         self.AccidentCords = []
         self.AccidentResults = []
+        self.Existing_Nodes = []
 
     # Setter Functions
 
@@ -72,3 +74,27 @@ class Util(object):
 
         self.AccidentCords = accident_cords
         self.AccidentResults = accident_results
+
+    def set_Exisiting_Nodes(self):
+        f = open("existing_rack.csv","r")
+
+        existing_nodes=[]
+
+        for line in f:
+            line = line.strip()
+
+            if len(line)>28 and str(line[:28])=="</div>\",#Style2-point-1-map,":
+                lat = 0
+                lon = 0
+                # need to deal with multiple digit racks
+                line = line.split(',')
+
+                if line[3] !='' or line[4] !='':
+                    lon = float(line[3])
+                    lat = float(line[4])
+                    loc = (lon,lat)
+                    existing_nodes.append(node.Node(location=loc,does_exist=True))
+
+        f.close() # close the existing node file
+        nodes = [(x.location[0], x.location[1]) for x in existing_nodes]
+        self.Existing_Nodes = spatial.cKDTree(nodes)
