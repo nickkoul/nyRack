@@ -1,10 +1,16 @@
 from sklearn.externals import joblib
 from sklearn import svm
+import main
 
 def classify(node):
     clf = joblib.load('model.pkl')
     # Build feature X from node
-    return clf.predict([[1, 1]])
+    X = [[  node.feature_nearby_accident,
+            # node.feature_nearby_venues )
+            node.feature_biking_popularity,
+            node.feature_nearby_transportation,
+            node.feature_average_rack_distance ]]
+    return clf.predict(X)
 
 if __name__ == '__main__':
     # Get citibike station points

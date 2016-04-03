@@ -4,6 +4,7 @@ import csv
 import math
 import numpy as np
 import random
+import util
 
 def get_citiBike_stations():
     """ Parse citibike data into nodes w/ features and value  """
