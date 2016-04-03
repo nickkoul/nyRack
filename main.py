@@ -87,7 +87,7 @@ def read_exisiting_nodes():
 
     return existing_nodes
 
-def get_k_new_stations(k, n):
+def get_k_new_stations(n):
     """Gets k new stations, chosing from n points"""
     # get new points
     new_nodes = []
@@ -110,11 +110,11 @@ def get_k_new_stations(k, n):
     sorted(n_nodes,key=attrgetter('desireability_score',reverse=True))
 
     # select k max of new points
-    k_nodes=[]
-    k_nodes = n_nodes[:k]
+    # k_nodes=[]
+    # k_nodes = n_nodes
 
     # make node of each and return list of nodes
-    return k_nodes
+    return n_nodes
 
 # if __name__ == '__main__':
 

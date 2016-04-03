@@ -125,14 +125,14 @@ rangeSlider.noUiSlider.on('update', function( values, handle ) {
 
   var k = Math.round(values[handle]);
 	rangeSliderValueElement.innerHTML = k;
-  var n = 5000;
+  var n = 100;
 
   var queryString = "http://localhost:5000/k?";
   queryString += ("k=" + (k.toString()));
   queryString += ("n=" + (n.toString()));
 
   $.getJSON(queryString, function(data) {
-    for (var i=0; i<data.length; ++i) {
+    for (var i=0; i<k; ++i) {
       addMarker(data[i], "#C97880");
     }
     $('#raw-data').html(data);
