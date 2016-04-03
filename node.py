@@ -7,6 +7,7 @@ import numpy as np
 import googlemaps
 from datetime import datetime
 from scipy import spatial
+import learn
 
 class Node:
     def __init__(self, location, does_exist):
@@ -27,13 +28,20 @@ class Node:
             - Nearby modes of transportation
             - Large summed distance of nearest N racks
         """
-        # self.feature_nearby_accident = self.get_nearby_accidents()
-        # self.feature_nearby_venues = self.get_nearby_venues()
-        # self.feature_pedestrian_flow = self.get_pedestrian_flow()
+        self.feature_nearby_accident = self.get_nearby_accidents()
+        self.feature_nearby_venues = self.get_nearby_venues()
+        self.feature_pedestrian_flow = self.get_pedestrian_flow()
         self.feature_biking_popularity = self.get_biking_popularity()
-        # self.feature_nearby_transportation = self.get_nearby_transportation()
-        # self.feature_average_rack_distance = self.get_average_rack_distance()
+        self.feature_nearby_transportation = self.get_nearby_transportation()
+        self.feature_average_rack_distance = self.get_average_rack_distance()
 
+    def calculate_desireability_score(self):
+        """
+        Calculates the final desirability score of a node given
+        the features previously calculated
+        """
+        self.desireability_score = learn.classify(self)
+        
     def get_nearby_accidents(self):
         """Gets nearby accidents"""
         threshold = 0.000042 # the size of a 2block in manhattan in change of degrees

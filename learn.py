@@ -1,5 +1,3 @@
-import main, node
-
 from sklearn.externals import joblib
 from sklearn import svm
 
