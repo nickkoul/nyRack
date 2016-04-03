@@ -92,9 +92,9 @@ if __name__ == '__main__':
 
     new_nodes = read_new_nodes()
 
-    # for node in new_nodes[:1]:
+    for node in new_nodes[:10]:
         #  For the get near_by_venues => only 500 requests per hour.
-        # node.calculate_desireability()
+        node.calculate_desireability()
 
     existing_nodes = read_exisiting_nodes()
     #
