@@ -71,10 +71,19 @@ class Node:
         """Gets the popularity of a bike route at this location
            Location window = 10m?
         """
-        if len(util.Util().LocationPopularity) == 0:
+        if len(util.Util().LocationPopularityResults) == 0:
             util.Util().set_LocationPopularity()
-            print util.Util().LocationPopularity
 
+        location_popularity = util.Util().LocationPopularity
+        location_popularity_results = util.Util().LocationPopularityResults
+
+        pt = [self.location[0], self.location[1]]
+
+        neighboring_nodes = location_popularity.query(pt, k=3)
+        result = 0
+        for res in neighboring_nodes[1]:
+            result += location_popularity_results[res]
+        return result
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)
@@ -106,8 +115,8 @@ class Node:
         pt = [self.location[0], self.location[1]]
         existing_nodes = util.Util().Existing_Nodes
 
-        neightboring_nodes = existing_nodes.query(pt, k=4)
-        return sum(neightboring_nodes[0])
+        neighboring_nodes = existing_nodes.query(pt, k=4)
+        return sum(neighboring_nodes[0])
 
 # if __name__ == '__main__':
 #     n = Node((-73.9808623, 40.7587442), True)

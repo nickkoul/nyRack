@@ -28,6 +28,7 @@ class Util(object):
         self.AccidentCords = []
         self.AccidentResults = []
         self.LocationPopularity = []
+        self.LocationPopularityResults = []
         self.Existing_Nodes = []
 
     # Setter Functions
@@ -87,7 +88,13 @@ class Util(object):
                                 (step['start_location']['lng'],
                                  step['start_location']['lat'])] += 1
             pickle.dump(location_popularity_dict, open("location_popularity.pkl", "wb"))
-        self.LocationPopularity = location_popularity_dict
+        locationPopularity = []
+        locationPopularityResults = []
+        for k,v in location_popularity_dict.iteritems():
+            locationPopularity.append(k)
+            locationPopularityResults.append(v)
+        self.LocationPopularity = spatial.cKDTree(locationPopularity)
+        self.LocationPopularityResults = locationPopularityResults
 
 def set_Accidents(self):
     f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")
