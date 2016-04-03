@@ -102,17 +102,17 @@ if __name__ == '__main__':
     existing_nodes = []
 
     new_nodes = read_new_nodes()
+    #
+    # for node in new_nodes[:100]:
+    #     #  For the get near_by_venues => only 500 requests per hour.
+    #     node.calculate_desireability()
 
-    for node in new_nodes[:100]:
-        #  For the get near_by_venues => only 500 requests per hour.
-        node.calculate_desireability()
 
-
-    existing_nodes = read_exisiting_nodes()
-
-    result = 0
-    for node in existing_nodes:
-        node.calculate_desireability()
-        if node.feature_nearby_accident>0:
-            result+=node.feature_nearby_accident
-            print result
+    # existing_nodes = read_exisiting_nodes()
+    #
+    # result = 0
+    # for node in existing_nodes:
+    #     node.calculate_desireability()
+    #     if node.feature_nearby_accident>0:
+    #         result+=node.feature_nearby_accident
+    #         print result

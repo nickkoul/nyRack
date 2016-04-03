@@ -35,19 +35,18 @@ class Node:
         """Gets nearby accidents"""
         threshold = 0.000042 # the size of a 2block in manhattan in change of degrees
 
-        if (len(util.Util().AccidentCords) == 0):
+        if (len(util.Util().AccidentResults) == 0):
             util.Util().set_Accidents()
         accident_points = util.Util().AccidentCords
         accident_results = util.Util().AccidentResults
-        # print("accidents", len(accident_points))
         result = 0
-        dist = 0
-        mindist = 1000000
-        for i in range(0,len(accident_points)):
-                dist = math.sqrt(((self.location[0]-accident_points[i][0])**2) + ((self.location[1]-accident_points[i][1])**2))
-                if dist<threshold:
-                    result = result + accident_results[i]
-        # print result
+        point = (self.location[0],self.location[1])
+
+        hits = accident_points.query_ball_point(point, 0.000042, 2)
+
+        for val in hits:
+            result+=int(accident_results[val])
+
         return result
 
     def get_nearby_venues(self):

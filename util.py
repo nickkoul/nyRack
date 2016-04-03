@@ -70,5 +70,5 @@ class Util(object):
 
         f.close()
 
-        self.AccidentCords = accident_cords
+        self.AccidentCords = spatial.cKDTree(accident_cords)
         self.AccidentResults = accident_results
