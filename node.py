@@ -1,8 +1,11 @@
+import csv
 import math
 import requests
 import foursquare
 import util
 import numpy as np
+import googlemaps
+from datetime import datetime
 
 class Node:
     def __init__(self, location, does_exist):
@@ -23,12 +26,12 @@ class Node:
             - Nearby modes of transportation
             - Large summed distance of nearest N racks
         """
-        self.feature_nearby_accident = self.get_nearby_accidents()
-        self.feature_nearby_venues = self.get_nearby_venues()
-        self.feature_pedestrian_flow = self.get_pedestrian_flow()
+        # self.feature_nearby_accident = self.get_nearby_accidents()
+        # self.feature_nearby_venues = self.get_nearby_venues()
+        # self.feature_pedestrian_flow = self.get_pedestrian_flow()
         self.feature_biking_popularity = self.get_biking_popularity()
-        self.feature_nearby_transportation = self.get_nearby_transportation()
-        self.feature_average_rack_distance = self.get_average_rack_distance()
+        # self.feature_nearby_transportation = self.get_nearby_transportation()
+        # self.feature_average_rack_distance = self.get_average_rack_distance()
 
     def get_nearby_accidents(self):
         # """Gets nearby accidents"""
@@ -78,12 +81,16 @@ class Node:
         """Gets the popularity of a bike route at this location
            Location window = 10m?
         """
+        if len(util.Util().LocationPopularity) == 0:
+            util.Util().set_LocationPopularity()
+            print util.Util().LocationPopularity
+
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
         if len(util.Util().Subways) == 0:
             util.Util().set_Subways()
-        print util.Util().Subways is util.Util().Subways
+            print util.Util().Subways is util.Util().Subways
         # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
         # print subways
         # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))

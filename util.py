@@ -1,5 +1,11 @@
+import csv
 import math
 import numpy as np
+import googlemaps
+import pickle
+import random
+from datetime import datetime
+from collections import defaultdict
 
 def get_Subways():
     return Subways
@@ -19,6 +25,7 @@ class Util(object):
         self.Busses = []
         self.AccidentCords = []
         self.AccidentResults = []
+        self.LocationPopularity = []
 
     # Setter Functions
 
@@ -82,3 +89,35 @@ class Util(object):
         # print len(AccidentResults)
         # return AccidentCords
         pass
+
+    def set_LocationPopularity(self):
+        routes = []
+        with open('data/citibikes/201506-citibike-tripdata.csv', 'rb') as trip_data:
+            next(trip_data)
+            trips = csv.reader(trip_data, delimiter=',', quoting=csv.QUOTE_NONE)
+            for station in trips:
+                start_location = (station[6], station[5])
+                end_location = (station[10], station[9])
+                routes.append({
+                    'start': start_location,
+                    'end': end_location,
+                })
+        random.shuffle(routes)
+        location_popularity_dict = defaultdict(int)
+        try:
+            location_popularity_dict = pickle.load(open("location_popularity.pkl", "rb"))
+        except:
+            gmaps = googlemaps.Client(key='AIzaSyDrfuB9hQjsZSxehG-vbXtRKJ96PA0d4Sw')
+            now = datetime.now()
+            for route in routes[0:2400]:
+                directions_result = gmaps.directions(route['start'][::-1],
+                                                     route['end'][::-1],
+                                                     mode="bicycling")
+                for direction in directions_result:
+                    for leg in direction['legs']:
+                        for step in leg['steps']:
+                            location_popularity_dict[
+                                (step['start_location']['lat'],
+                                 step['start_location']['lat'])] += 1
+            pickle.dump(location_popularity_dict, open("location_popularity.pkl", "wb"))
+        self.LocationPopularity = location_popularity_dict
