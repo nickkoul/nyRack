@@ -27,12 +27,12 @@ class Node:
             - Nearby modes of transportation
             - Large summed distance of nearest N racks
         """
-        # self.feature_nearby_accident = self.get_nearby_accidents()
+        self.feature_nearby_accident = self.get_nearby_accidents()
         # self.feature_nearby_venues = self.get_nearby_venues()
-        # self.feature_pedestrian_flow = self.get_pedestrian_flow()
+        self.feature_pedestrian_flow = self.get_pedestrian_flow()
         self.feature_biking_popularity = self.get_biking_popularity()
-        # self.feature_nearby_transportation = self.get_nearby_transportation()
-        # self.feature_average_rack_distance = self.get_average_rack_distance()
+        self.feature_nearby_transportation = self.get_nearby_transportation()
+        self.feature_average_rack_distance = self.get_average_rack_distance()
 
     def get_nearby_accidents(self):
         """Gets nearby accidents"""
@@ -43,7 +43,7 @@ class Node:
         accident_points = util.Util().AccidentCords
         accident_results = util.Util().AccidentResults
         result = 0
-        point = (self.location[0],self.location[1])
+        point = (float(self.location[0]),float(self.location[1]))
 
         hits = accident_points.query_ball_point(point, 0.000042, 2)
 
@@ -77,7 +77,7 @@ class Node:
         location_popularity = util.Util().LocationPopularity
         location_popularity_results = util.Util().LocationPopularityResults
 
-        pt = [self.location[0], self.location[1]]
+        pt = [(self.location[0]), float(self.location[1])]
 
         neighboring_nodes = location_popularity.query(pt, k=3)
         result = 0
