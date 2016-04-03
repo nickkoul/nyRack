@@ -34,7 +34,7 @@ class Node:
         """Earth Radius 6371 km"""
         xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
         ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-
+        threshold = 256 # the size of a block in manhattan
         """ stored as (long,lat,injured,killed) """
         accident_points = []
 
@@ -52,7 +52,20 @@ class Node:
                         accident_points.append(point)
             i+=1
 
-        print len(accident_points)
+
+        result = 0
+        for point in accident_points:
+            xcord_accident = (6371*1000)*math.cos((point[0]*2*math.pi)/float(360))
+            ycord_accident = (6371*1000)*math.sin((point[1]*2*math.pi)/float(360))
+
+            if math.sqrt((xcord_accident-xcord_self)**2 +(ycord_accident-ycord_self)**2)<threshold:
+                result = result + point[2] + point[3]
+
+        return result
+
+
+
+
 
 
 
