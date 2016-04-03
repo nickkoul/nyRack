@@ -22,12 +22,12 @@ class Node:
             - Nearby modes of transportation
             - Large summed distance of nearest N racks
         """
-        feature_nearby_accident = self.get_nearby_accidents()
-        feature_nearby_venues = self.get_nearby_venues()
-        feature_pedestrian_flow = self.get_pedestrian_flow()
-        feature_biking_popularity = self.get_biking_popularity()
+        # feature_nearby_accident = self.get_nearby_accidents()
+        # feature_nearby_venues = self.get_nearby_venues()
+        # feature_pedestrian_flow = self.get_pedestrian_flow()
+        # feature_biking_popularity = self.get_biking_popularity()
         feature_nearby_transportation = self.get_nearby_transportation()
-        feature_average_rack_distance = self.get_average_rack_distance()
+        # feature_average_rack_distance = self.get_average_rack_distance()
 
     def get_nearby_accidents(self):
         """Gets nearby accidents"""
@@ -78,7 +78,14 @@ class Node:
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
-        # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
+        subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
+
+        def distances(a, b):
+            return numpy.linalg.norm(a-b)
+
+        vfunc = np.vectorize(distances)
+        ans = vfunc(currentPoints, np.array([self.location[0], self.location[1]]))
+
         # if(len(util.Subways) == 0):
         #     util.set_Subways()
         # else:
