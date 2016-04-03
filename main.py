@@ -100,20 +100,13 @@ def get_k_new_stations(n):
     n_nodes = []
     random.shuffle(new_nodes)
     n_nodes = new_nodes[:n]
-    print("first")
-    print(n)
-    print(len(n_nodes))
-    # classify n new points
     for i, node in enumerate(n_nodes):
-        print("desirability num: ", i)
         node.calculate_desireability()
-    print("desirability done")
 
     # sort n nodes by desireability_score
     for node in n_nodes:
         node.calculate_desireability_score()
-    print("desirability sorted")
-    sorted(n_nodes,key=attrgetter('desireability_score'),reverse=True)
+    n_nodes = sorted(n_nodes,key=attrgetter('desireability_score'),reverse=True)
 
     # select k max of new points
     # k_nodes=[]

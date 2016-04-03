@@ -72,8 +72,8 @@ class Node:
             client = foursquare.Foursquare(client_id, client_secret)
 
             ll = str(self.location[1]) + "," + str(self.location[0])
-            rad = 100 # Radius in meters
-            resp = client.venues.search(params={'rad': str(rad), "ll" : ll})
+            rad = 20 # Radius in meters
+            resp = client.venues.search(params={'radius': str(rad), "ll" : ll, "limit": 50, "intent":"browse"})
             pickle.dump(resp, open("nearby_venues.pkl", "wb"))
         return len(resp["venues"])
 
