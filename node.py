@@ -81,17 +81,21 @@ class Node:
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
-        subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
-        xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
-        ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-        pt = np.array([xcord_self, ycord_self])
-
-        def distances(a):
-            return np.linalg.norm(a-pt)
-
-        vfunc = np.vectorize(distances)
-        # print(distances(subways[0], np.array([xcord_self, ycord_self])))
-        data = np.array([np.linalg.norm(a-pt) for a in subways])
+        if len(util.Util().Subways) == 0:
+            util.Util().set_Subways()
+        print util.Util().Subways is util.Util().Subways
+        # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
+        # print subways
+        # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
+        # ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
+        # pt = np.array([xcord_self, ycord_self])
+        #
+        # def distances(a):
+        #     return np.linalg.norm(a-pt)
+        #
+        # vfunc = np.vectorize(distances)
+        # # print(distances(subways[0], np.array([xcord_self, ycord_self])))
+        # data = np.array([np.linalg.norm(a-pt) for a in subways])
         # print(data[:10])
         # ans = np.where( data < 100  )
         # print(len(data))
