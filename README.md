@@ -4,7 +4,7 @@ Finding optimal locations for New York City bicycle racks.
 #### Authors   
 Nicholas Koulopoulos, Joseph Lee, and Ray Jacobson   
 
-Special Thanks to Rensselaer Polynic Institute 2nd anual Lally Business Analytics Competition 
+Special Thanks to Rensselaer Polynic Institute 2nd annual Lally Business Analytics Competition 
 
 ![Screenshot of nyRack](https://github.com/nickkoul/nyRack/blob/master/docs/nyRack.png)
 
