@@ -55,6 +55,7 @@ class Util(object):
     def set_Accidents(self):
         f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")
 
+        i=0
         accident_cords = []
         accident_results=[]
         for line in f:
@@ -69,6 +70,7 @@ class Util(object):
                         """ long , lat"""
                         accident_cords.append( (point[1],point[0]) )
                         accident_results.append(  point[2]+point[3] )
+            i+=1
 
         f.close()
 
