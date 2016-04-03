@@ -44,6 +44,16 @@
       font-size: 18px;
       color: #333333;
     }
+    .greencluster {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(86,175,70,0.5);
+      border: 3px solid rgba(86,175,70,0.3);
+      border-radius: 30px;
+      text-align: center;
+      font-size: 18px;
+      color: #333333;
+    }
     b {
       font-family: 'Lato', sans-serif;
       font-weight: 300;
@@ -92,6 +102,7 @@
   <h1>nyRack <em>\ˈe-nēˈrak\</em></h1>
   <div id="slider-range"></div>
   <h2>Displaying </h2><h2 id="slider-range-value"></h2><h2> optimized new bike rack site(s)</h2>
+  <input type="checkbox" id="citi-racks"> Show Citi Racks
   <div id='map' class='map'></div>
   <h3 class="red">Optimized new locations</h3>
   <h3 class="blue">Already installed locations</h3>
@@ -104,7 +115,7 @@
 <script src="nouislider.min.js"></script>
 <script>
 
-var n = 100;
+var n = 200;
 
 var discovered = false;
 var discovered_data;
@@ -162,6 +173,12 @@ var markers = L.markerClusterGroup({
   }
 });
 
+var citiMarkers = L.markerClusterGroup({
+  iconCreateFunction: function (cluster) {
+    return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>', className: 'greencluster', iconSize: L.point(60, 60) });
+  }
+});
+
 function addMarker(latlong, color) {
   var marker = L.marker(latlong, {
       icon: L.mapbox.marker.icon({
@@ -181,9 +198,24 @@ function addMarkerToClusters(latlong, color) {
   markers.addLayer(marker);
 }
 
+function addMarkerToCitiClusters(latlong, color) {
+  var marker = L.marker(latlong, {
+      icon: L.mapbox.marker.icon({
+        'marker-color': color
+      })
+  });
+  citiMarkers.addLayer(marker);
+}
+
 $.getJSON("http://localhost:5000/existing", function(data) {
   for (var i=0; i<data.length; ++i) {
     addMarkerToClusters(data[i], "#44c6f8");
+  }
+});
+
+$.getJSON("http://localhost:5000/citibike", function(data) {
+  for (var i=0; i<data.length; ++i) {
+    addMarkerToCitiClusters(data[i], "#56AF46");
   }
 });
 
@@ -193,11 +225,14 @@ $.getJSON("http://localhost:5000/existing", function(data) {
 //   }
 // });
 
-// $.getJSON("http://localhost:5000/citibike", function(data) {
-//   for (var i=0; i<data.length; ++i) {
-//     addMarker(data[i], "#44c6f8");
-//   }
-// });
+$('#citi-racks').change(function(){
+  if (this.checked) {
+    map.addLayer(citiMarkers);
+  } else {
+    console.log('rem');
+    map.removeLayer(citiMarkers);
+  }
+});
 
 map.addLayer(markers);
 
