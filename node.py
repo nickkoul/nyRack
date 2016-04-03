@@ -30,37 +30,24 @@ class Node:
         self.feature_nearby_transportation = self.get_nearby_transportation()
         self.feature_average_rack_distance = self.get_average_rack_distance()
 
-    def get_nearby_accidents(self,accident_cords,paccident_results):
+    def get_nearby_accidents(self):
         """Gets nearby accidents"""
-        """Earth Radius 6371 km"""
-        xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
-        ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-        threshold = 256 # the size of a block in manhattan
-        """ stored as (long,lat,injured,killed) """
+        threshold = 0.000042 # the size of a 2block in manhattan in change of degrees
 
-        accident_points = []
-        accidnet_results = []
-        accident_points = accident_cords
-        accidnet_results = paccident_results
-        #accident_results = []
-        #accident_points = util.get_AccidentCords() if (len(util.get_AccidentCords())!=0) else util.set_Accidents()
-        #accident_results = util.AccidentResults
-
-        cords_self = np.array([xcord_self,ycord_self])
+        if (len(util.Util().AccidentCords) == 0):
+            util.Util().set_Accidents()
+        accident_points = util.Util().AccidentCords
+        accident_results = util.Util().AccidentResults
 
         result = 0
         dist = 0
+        mindist = 1000000
         for i in range(0,len(accident_points)):
-                dist = np.linalg.norm(cords_self-accident_points[i])
-                if(i%10000)==0:
-                    print i,dist
+                dist = math.sqrt(((self.location[0]-accident_points[i][0])**2) + ((self.location[1]-accident_points[i][1])**2))
                 if dist<threshold:
-                    print"==================>%d"%result
                     result = result + accident_results[i]
 
         return result
-
-
 
     def get_nearby_venues(self):
         """Gets nearby venues within a 100 meter radius"""
@@ -85,9 +72,9 @@ class Node:
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
 
-        if len(util.Util().Subways) == 0:
-            util.Util().set_Subways()
-        print util.Util().Subways is util.Util().Subways
+        # if len(util.Util().Subways) == 0:
+        #     util.Util().set_Subways()
+        # print util.Util().Subways is util.Util().Subways
         # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
         # print subways
         # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
@@ -110,12 +97,11 @@ class Node:
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
 
-
-if __name__ == '__main__':
-    n = Node((-73.9808623, 40.7587442), True)
-    print n.get_nearby_accidents()
-    print n.get_nearby_venues()
-    print n.get_pedestrian_flow()
-    print n.get_nearby_transportation()
-    print n.get_biking_popularity()
-    print n.get_average_rack_distance()
+# if __name__ == '__main__':
+#     n = Node((-73.9808623, 40.7587442), True)
+#     print n.get_nearby_accidents()
+#     print n.get_nearby_venues()
+#     print n.get_pedestrian_flow()
+#     print n.get_nearby_transportation()
+#     print n.get_biking_popularity()
+#     print n.get_average_rack_distance()
