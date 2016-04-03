@@ -100,5 +100,8 @@ if __name__ == '__main__':
 
     print"%d + %d = %d"%(len(new_nodes),len(existing_nodes),len(new_nodes)+len(existing_nodes))
 
-    print existing_nodes[0].location
-    existing_nodes[0].get_nearby_accidents()
+    for node in existing_nodes:
+        test =node.get_nearby_accidents()
+        if test>0:
+            print node.location
+            print test
