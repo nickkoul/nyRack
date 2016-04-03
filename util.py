@@ -61,7 +61,7 @@ class Util(object):
 
     def set_LocationPopularity(self):
         routes = []
-        with open('data/citibikes/201506-citibike-tripdata.csv', 'rb') as trip_data:
+        with open('data/citibike/201506-citibike-tripdata.csv', 'rb') as trip_data:
             next(trip_data)
             trips = csv.reader(trip_data, delimiter=',', quoting=csv.QUOTE_NONE)
             for station in trips:
@@ -97,54 +97,54 @@ class Util(object):
         self.LocationPopularity = spatial.cKDTree(locationPopularity)
         self.LocationPopularityResults = locationPopularityResults
 
-def set_Accidents(self):
-    f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")
+    def set_Accidents(self):
+        f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")
 
-    i=0
-    accident_cords = []
-    accident_results=[]
-    for line in f:
-        line = line.strip()
-        line = line.split(',')
-        if len(line)==30 and i!=0:
-
-            if line[4]!=''and line[5] != '' and line[14] != '' and line[15] != '':
-                if int(line[14])>0 or int(line[15])>0:
-                    point = (float(line[4]),float(line[5]),int(line[14]),int(line[15]))
-
-                    """ long , lat"""
-                    accident_cords.append( (point[1],point[0]) )
-                    accident_results.append(  point[2]+point[3] )
-        i+=1
-
-    f.close()
-
-    self.AccidentCords = spatial.cKDTree(accident_cords)
-    self.AccidentResults = accident_results
-
-def set_Exisiting_Nodes(self):
-    f = open("existing_rack.csv","r")
-
-    existing_nodes=[]
-
-    for line in f:
-        line = line.strip()
-
-        if len(line)>28 and str(line[:28])=="</div>\",#Style2-point-1-map,":
-            lat = 0
-            lon = 0
-            # need to deal with multiple digit racks
+        i=0
+        accident_cords = []
+        accident_results=[]
+        for line in f:
+            line = line.strip()
             line = line.split(',')
+            if len(line)==30 and i!=0:
 
-            if line[3] !='' or line[4] !='':
-                lon = float(line[3])
-                lat = float(line[4])
-                loc = (lon,lat)
-                existing_nodes.append(node.Node(location=loc,does_exist=True))
+                if line[4]!=''and line[5] != '' and line[14] != '' and line[15] != '':
+                    if int(line[14])>0 or int(line[15])>0:
+                        point = (float(line[4]),float(line[5]),int(line[14]),int(line[15]))
 
-    f.close() # close the existing node file
-    nodes = [(x.location[0], x.location[1]) for x in existing_nodes]
-    self.Existing_Nodes = spatial.cKDTree(nodes)
+                        """ long , lat"""
+                        accident_cords.append( (point[1],point[0]) )
+                        accident_results.append(  point[2]+point[3] )
+            i+=1
+
+        f.close()
+
+        self.AccidentCords = spatial.cKDTree(accident_cords)
+        self.AccidentResults = accident_results
+
+    def set_Exisiting_Nodes(self):
+        f = open("existing_rack.csv","r")
+
+        existing_nodes=[]
+
+        for line in f:
+            line = line.strip()
+
+            if len(line)>28 and str(line[:28])=="</div>\",#Style2-point-1-map,":
+                lat = 0
+                lon = 0
+                # need to deal with multiple digit racks
+                line = line.split(',')
+
+                if line[3] !='' or line[4] !='':
+                    lon = float(line[3])
+                    lat = float(line[4])
+                    loc = (lon,lat)
+                    existing_nodes.append(node.Node(location=loc,does_exist=True))
+
+        f.close() # close the existing node file
+        nodes = [(x.location[0], x.location[1]) for x in existing_nodes]
+        self.Existing_Nodes = spatial.cKDTree(nodes)
 
 def set_New_Nodes(self):
     f = open("map","r") # open the new node input file

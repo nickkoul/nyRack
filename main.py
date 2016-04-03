@@ -9,15 +9,17 @@ def get_citiBike_stations():
     """ Parse citibike data into nodes w/ features and value  """
     citiStations = {}
     with open('data/citibike/station-data.csv', 'rb') as stationDataFile:
+        next(stationDataFile)
         citiBikeStations = csv.reader(stationDataFile, delimiter=',', quoting=csv.QUOTE_NONE)
         for station in citiBikeStations:
-            location = (station[5], station[6])
+            location = (float(station[5]), float(station[6]))
             does_exist = True
             stationId = station[0]
             citiStations[stationId] = CitiStation(stationId, location, does_exist)
 
     stationStatus = []
     with open('data/citibike/station-status.csv', 'rb') as stationStatusFile:
+        next(stationStatusFile)
         citiBikeStatus = csv.reader(stationStatusFile, delimiter=',', quoting=csv.QUOTE_NONE)
         for status in citiBikeStatus:
             stationId = status[0]
