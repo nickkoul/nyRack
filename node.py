@@ -8,6 +8,7 @@ import numpy as np
 import googlemaps
 from datetime import datetime
 from scipy import spatial
+import learn
 
 class Node:
     def __init__(self, location, does_exist):
@@ -34,6 +35,13 @@ class Node:
         self.feature_biking_popularity = self.get_biking_popularity()
         self.feature_nearby_transportation = self.get_nearby_transportation()
         self.feature_average_rack_distance = self.get_average_rack_distance()
+
+    def calculate_desireability_score(self):
+        """
+        Calculates the final desirability score of a node given
+        the features previously calculated
+        """
+        self.desireability_score = learn.classify(self)
 
     def get_nearby_accidents(self):
         """Gets nearby accidents"""

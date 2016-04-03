@@ -3,6 +3,8 @@ from citiStation import CitiStation
 import csv
 import math
 import numpy as np
+import random
+import util
 
 def get_citiBike_stations():
     """ Parse citibike data into nodes w/ features and value  """
@@ -88,27 +90,47 @@ def read_exisiting_nodes():
 def get_k_new_stations(k, n):
     """Gets k new stations, chosing from n points"""
     # get new points
-    # Loop thru n new points
-    # classify n new points
-    # select k max of new points
-    # make node of each and return list of nodes
-    return [node.Node((-73.9808623, 40.7587442), True)]
+    new_nodes = []
+    if (len(util.Util().New_Nodes) == 0):
+        util.Util().set_New_Nodes()
+    new_nodes = util.Util().New_Nodes
 
-if __name__ == '__main__':
+    # Loop thru n new points
+    n_nodes = []
+    random.shuffle(new_nodes)
+    n_nodes = new_nodes[:n]
+
+    # classify n new points
+    for node in n_nodes:
+        node.calculate_desireability()
+
+    # sort n nodes by desireability_score
+    for node in n_nodes:
+        node.calculate_desireability_score()
+    sorted(n_nodes,key=attrgetter('desireability_score',reverse=True))
+
+    # select k max of new points
+    k_nodes=[]
+    k_nodes = n_nodes[:k]
+
+    # make node of each and return list of nodes
+    return k_nodes
+
+# if __name__ == '__main__':
 
     # Should be 509 citibikes
     # citiStations = get_citiBike_stations()
     # Raymond Run machine learning on citiStations
 
-    new_nodes = []
-    existing_nodes = []
-
-    new_nodes = read_new_nodes()
-
-
-    for node in new_nodes:
-        #  For the get near_by_venues => only 500 requests per hour.
-        node.calculate_desireability()
+    # new_nodes = []
+    # existing_nodes = []
+    #
+    # new_nodes = read_new_nodes()
+    #
+    #
+    # for node in new_nodes:
+    #     #  For the get near_by_venues => only 500 requests per hour.
+    #     node.calculate_desireability()
 
 
     # existing_nodes = read_exisiting_nodes()
