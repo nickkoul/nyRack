@@ -1,6 +1,8 @@
 import node
 from citiStation import CitiStation
 import csv
+import math
+import numpy as np
 
 def get_citiBike_stations():
     """ Parse citibike data into nodes w/ features and value  """
@@ -91,17 +93,47 @@ if __name__ == '__main__':
     existing_nodes = []
 
     new_nodes = read_new_nodes()
-
-    for node in new_nodes[:10]:
-        #  For the get near_by_venues => only 500 requests per hour.
-        node.calculate_desireability()
-
     existing_nodes = read_exisiting_nodes()
+
+
+    # for node in new_nodes[:10]:
+    #     #  For the get near_by_venues => only 500 requests per hour.
+    #     node.calculate_desireability()
+
     #
     # print"%d + %d = %d"%(len(new_nodes),len(existing_nodes),len(new_nodes)+len(existing_nodes))
     #
+
+
+
+    f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")
+    i=0
+    accident_cords = []
+    accident_results=[]
+    for line in f:
+        line = line.strip()
+        line = line.split(',')
+        if len(line)==30 and i!=0:
+            #print i
+            #print line
+            if line[4]!=''and line[5] != '' and line[14] != '' and line[15] != '':
+                if int(line[14])>0 or int(line[15])>0:
+                    point = (float(line[4]),float(line[5]),int(line[14]),int(line[15]))
+
+                    xcord_accident = (6371*1000)*math.cos((point[0]*2*math.pi)/float(360))
+                    ycord_accident = (6371*1000)*math.sin((point[1]*2*math.pi)/float(360))
+
+                    a = np.array([xcord_accident,ycord_accident])
+                    accident_cords.append(a)
+                    accident_results.append(  point[2]+point[3] )
+        i+=1
+
+    f.close()
+
+
+    #
     for node in existing_nodes:
-        test =node.get_nearby_accidents()
+        test =node.get_nearby_accidents(accident_cords,accident_results)
         if test>0:
             print node.location
             print test
