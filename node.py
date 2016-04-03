@@ -3,6 +3,7 @@ import requests
 import foursquare
 import util
 import numpy as np
+from scipy import spatial
 
 class Node:
     def __init__(self, location, does_exist):
@@ -81,26 +82,25 @@ class Node:
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
-        if len(util.Util().Subways) == 0:
+        if not isinstance(util.Util().Subways, spatial.ckdtree.cKDTree):
             util.Util().set_Subways()
-        print util.Util().Subways is util.Util().Subways
-        # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
-        # print subways
-        # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
-        # ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-        # pt = np.array([xcord_self, ycord_self])
+
+        subways = util.Util().Subways
+        pt = np.array([self.location[0], self.location[1]])
+        # point = spatial.cKDTree(pt)
+
+        num = subways.query_ball_point( pt, 2*2.099999999671809*10**(-05), 2)
+        print(num)
         #
         # def distances(a):
         #     return np.linalg.norm(a-pt)
         #
-        # vfunc = np.vectorize(distances)
+        # # vfunc = np.vectorize(distances)
+        # # data = vfunc(subways)
         # # print(distances(subways[0], np.array([xcord_self, ycord_self])))
         # data = np.array([np.linalg.norm(a-pt) for a in subways])
-        # print(data[:10])
-        # ans = np.where( data < 100  )
-        # print(len(data))
-        # return 1
-        pass
+        # ans = ( data < 0.1079  ).sum()
+        # print(ans)
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
