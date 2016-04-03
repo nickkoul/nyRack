@@ -32,33 +32,23 @@ class Node:
         self.feature_average_rack_distance = self.get_average_rack_distance()
 
     def get_nearby_accidents(self):
-        # """Gets nearby accidents"""
-        # """Earth Radius 6371 km"""
-        # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
-        # ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-        # threshold = 256 # the size of a block in manhattan
-        # """ stored as (long,lat,injured,killed) """
-        #
-        # accident_points = []
-        # #accident_results = []
-        # accident_points = util.get_AccidentCords() if (len(util.get_AccidentCords())!=0) else util.set_Accidents()
-        # #accident_results = util.AccidentResults
-        #
-        # cords_self = np.array([xcord_self,ycord_self])
-        #
-        # result = 0
-        # dist = 0
-        # for i in range(0,len(accident_points)):
-        #         dist = np.linalg.norm(cords_self-accident_points[i])
-        #         print dist
-        #         if dist<-2343250:
-        #
-        #             result = result + accident_results[i]
-        #
-        # return result
-        pass
+        """Gets nearby accidents"""
+        threshold = 0.000042 # the size of a 2block in manhattan in change of degrees
 
+        if (len(util.Util().AccidentCords) == 0):
+            util.Util().set_Accidents()
+        accident_points = util.Util().AccidentCords
+        accident_results = util.Util().AccidentResults
 
+        result = 0
+        dist = 0
+        mindist = 1000000
+        for i in range(0,len(accident_points)):
+                dist = math.sqrt(((self.location[0]-accident_points[i][0])**2) + ((self.location[1]-accident_points[i][1])**2))
+                if dist<threshold:
+                    result = result + accident_results[i]
+
+        return result
 
     def get_nearby_venues(self):
         """Gets nearby venues within a 100 meter radius"""
@@ -91,26 +81,17 @@ class Node:
 
         num = subways.query_ball_point( pt, 2*2.099999999671809*10**(-05), 2)
         print(num)
-        #
-        # def distances(a):
-        #     return np.linalg.norm(a-pt)
-        #
-        # # vfunc = np.vectorize(distances)
-        # # data = vfunc(subways)
-        # # print(distances(subways[0], np.array([xcord_self, ycord_self])))
-        # data = np.array([np.linalg.norm(a-pt) for a in subways])
-        # ans = ( data < 0.1079  ).sum()
-        # print(ans)
+
+
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
 
-
-if __name__ == '__main__':
-    n = Node((-73.9808623, 40.7587442), True)
-    print n.get_nearby_accidents()
-    print n.get_nearby_venues()
-    print n.get_pedestrian_flow()
-    print n.get_nearby_transportation()
-    print n.get_biking_popularity()
-    print n.get_average_rack_distance()
+# if __name__ == '__main__':
+#     n = Node((-73.9808623, 40.7587442), True)
+#     print n.get_nearby_accidents()
+#     print n.get_nearby_venues()
+#     print n.get_pedestrian_flow()
+#     print n.get_nearby_transportation()
+#     print n.get_biking_popularity()
+#     print n.get_average_rack_distance()

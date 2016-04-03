@@ -1,6 +1,8 @@
 import node
 from citiStation import CitiStation
 import csv
+import math
+import numpy as np
 
 def get_citiBike_stations():
     """ Parse citibike data into nodes w/ features and value  """
@@ -105,12 +107,5 @@ if __name__ == '__main__':
         #  For the get near_by_venues => only 500 requests per hour.
         node.calculate_desireability()
 
-    # existing_nodes = read_exisiting_nodes()
-    #
-    # print"%d + %d = %d"%(len(new_nodes),len(existing_nodes),len(new_nodes)+len(existing_nodes))
-    #
-    # for node in existing_nodes:
-    #     test =node.get_nearby_accidents()
-    #     if test>0:
-    #         print node.location
-    #         print test
+
+    existing_nodes = read_exisiting_nodes()
