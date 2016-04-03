@@ -30,23 +30,23 @@ class Util(object):
             for line in stops:
                 line = line.strip()
                 line = line.split(',')
+                # Long lat
                 subways_locations.add((float(line[5]), float(line[4])))
 
-        subway_list = [[x[0], x[1]] for x in list(subways_locations)]
-        subways = spatial.cKDTree(np.array(list(subways_locations)))
-
+        subway_list = list(subways_locations)
+        subways = spatial.cKDTree(subway_list)
         self.Subways = subways
 
     def set_Busses(self):
+        bus_stops = []
         with open('data/transit/bus/stops.txt') as stops:
             next(stops)
             for line in stops:
                 line = line.strip()
                 line = line.split(',')
-                xcord_self = (6371*1000)*math.cos((float(line[4])*2*math.pi)/float(360))
-                ycord_self = (6371*1000)*math.sin((float(line[3])*2*math.pi)/float(360))
-                bus_stops.append(np.array([xcord_self, ycord_self]))
-        self.Busses = bus_stops
+                bus_stops.append([float(line[4]), float(line[3])])
+
+        self.Busses = spatial.cKDTree(bus_stops)
 
     def set_Accidents(self):
         f = open("./data/accident/NYPD_Motor_Vehicle_Collisions.csv")

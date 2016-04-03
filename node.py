@@ -39,7 +39,7 @@ class Node:
             util.Util().set_Accidents()
         accident_points = util.Util().AccidentCords
         accident_results = util.Util().AccidentResults
-
+        # print("accidents", len(accident_points))
         result = 0
         dist = 0
         mindist = 1000000
@@ -47,7 +47,7 @@ class Node:
                 dist = math.sqrt(((self.location[0]-accident_points[i][0])**2) + ((self.location[1]-accident_points[i][1])**2))
                 if dist<threshold:
                     result = result + accident_results[i]
-
+        # print result
         return result
 
     def get_nearby_venues(self):
@@ -71,17 +71,24 @@ class Node:
         """
 
     def get_nearby_transportation(self):
-        """Gets the nearby transportation (bus stop, subway, etc.)"""
+        """Gets the nearby transportation (bus stop, subway, etc.)
+            Note that i am using 0.0042 intead of 0.000042
+        """
+
         if not isinstance(util.Util().Subways, spatial.ckdtree.cKDTree):
             util.Util().set_Subways()
+        if not isinstance(util.Util().Busses, spatial.ckdtree.cKDTree):
+            util.Util().set_Busses()
+
+        pt = [self.location[0], self.location[1]]
 
         subways = util.Util().Subways
-        pt = np.array([self.location[0], self.location[1]])
-        # point = spatial.cKDTree(pt)
+        transit = len(subways.query_ball_point(pt, 0.0042, 2))
 
-        num = subways.query_ball_point( pt, 2*2.099999999671809*10**(-05), 2)
-        print(num)
+        busses = util.Util().Busses
 
+        transit += len(busses.query_ball_point(pt, 0.0042, 2))
+        return transit
 
 
     def get_average_rack_distance(self):
