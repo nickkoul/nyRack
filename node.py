@@ -52,6 +52,10 @@ class Node:
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
+        # subwayStops = {}
+        # with open('data/transit/subway/stops.txt') as fp:
+        #     for line in fp:
+        #         print line
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
