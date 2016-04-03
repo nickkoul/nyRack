@@ -3,6 +3,7 @@ import math
 import requests
 import foursquare
 import util
+import pickle
 import numpy as np
 import googlemaps
 from datetime import datetime
@@ -29,7 +30,7 @@ class Node:
             - Large summed distance of nearest N racks
         """
         self.feature_nearby_accident = self.get_nearby_accidents()
-        # self.feature_nearby_venues = self.get_nearby_venues()
+        self.feature_nearby_venues = self.get_nearby_venues()
         self.feature_pedestrian_flow = self.get_pedestrian_flow()
         self.feature_biking_popularity = self.get_biking_popularity()
         self.feature_nearby_transportation = self.get_nearby_transportation()
@@ -62,14 +63,18 @@ class Node:
 
     def get_nearby_venues(self):
         """Gets nearby venues within a 100 meter radius"""
+        resp = {}
+        try:
+            resp = pickle.load(open("nearby_venues.pkl", "rb"))
+        except:
+            client_id = "UDGDHLG2KHK0A3U1KWZQ0WBEWOG0W3X0HTC0OVIGLQNSHNL2"
+            client_secret = "HWDWNMI0FAW34FIDJL1LDY5VXMMRNRJM5VY15A0310JQI0MH"
+            client = foursquare.Foursquare(client_id, client_secret)
 
-        client_id = "UDGDHLG2KHK0A3U1KWZQ0WBEWOG0W3X0HTC0OVIGLQNSHNL2"
-        client_secret = "HWDWNMI0FAW34FIDJL1LDY5VXMMRNRJM5VY15A0310JQI0MH"
-        client = foursquare.Foursquare(client_id, client_secret)
-
-        ll = str(self.location[1]) + "," + str(self.location[0])
-        rad = 100 # Radius in meters
-        resp = client.venues.search(params={'rad': str(rad), "ll" : ll})
+            ll = str(self.location[1]) + "," + str(self.location[0])
+            rad = 100 # Radius in meters
+            resp = client.venues.search(params={'rad': str(rad), "ll" : ll})
+            pickle.dump(resp, open("nearby_venues.pkl", "wb"))
         return len(resp["venues"])
 
     def get_pedestrian_flow(self):

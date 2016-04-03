@@ -104,15 +104,17 @@
 <script src="nouislider.min.js"></script>
 <script>
 
+var n = 100;
+
 var selectedMarkerList = [];
 
 var rangeSlider = document.getElementById('slider-range');
 
 noUiSlider.create(rangeSlider, {
-	start: [ 20 ],
+	start: [ 1 ],
 	range: {
 		'min': [  1 ],
-		'max': [ 1000 ]
+		'max': [ n ]
 	}
 });
 
@@ -125,11 +127,10 @@ rangeSlider.noUiSlider.on('update', function( values, handle ) {
 
   var k = Math.round(values[handle]);
 	rangeSliderValueElement.innerHTML = k;
-  var n = 100;
 
   var queryString = "http://localhost:5000/k?";
   queryString += ("k=" + (k.toString()));
-  queryString += ("n=" + (n.toString()));
+  queryString += ("&n=" + (n.toString()));
 
   $.getJSON(queryString, function(data) {
     for (var i=0; i<k; ++i) {
