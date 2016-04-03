@@ -24,11 +24,11 @@ class Node:
             - Large summed distance of nearest N racks
         """
         self.feature_nearby_accident = self.get_nearby_accidents()
-        self.feature_nearby_venues = self.get_nearby_venues()
-        self.feature_pedestrian_flow = self.get_pedestrian_flow()
-        self.feature_biking_popularity = self.get_biking_popularity()
-        self.feature_nearby_transportation = self.get_nearby_transportation()
-        self.feature_average_rack_distance = self.get_average_rack_distance()
+        # self.feature_nearby_venues = self.get_nearby_venues()
+        # self.feature_pedestrian_flow = self.get_pedestrian_flow()
+        # self.feature_biking_popularity = self.get_biking_popularity()
+        # self.feature_nearby_transportation = self.get_nearby_transportation()
+        # self.feature_average_rack_distance = self.get_average_rack_distance()
 
     def get_nearby_accidents(self):
         """Gets nearby accidents"""
