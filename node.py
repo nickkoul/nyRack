@@ -3,6 +3,7 @@ import requests
 import foursquare
 import util
 import numpy as np
+from scipy import spatial
 
 class Node:
     def __init__(self, location, does_exist):
@@ -38,7 +39,7 @@ class Node:
             util.Util().set_Accidents()
         accident_points = util.Util().AccidentCords
         accident_results = util.Util().AccidentResults
-
+        # print("accidents", len(accident_points))
         result = 0
         dist = 0
         mindist = 1000000
@@ -46,7 +47,7 @@ class Node:
                 dist = math.sqrt(((self.location[0]-accident_points[i][0])**2) + ((self.location[1]-accident_points[i][1])**2))
                 if dist<threshold:
                     result = result + accident_results[i]
-
+        # print result
         return result
 
     def get_nearby_venues(self):
@@ -70,29 +71,25 @@ class Node:
         """
 
     def get_nearby_transportation(self):
-        """Gets the nearby transportation (bus stop, subway, etc.)"""
+        """Gets the nearby transportation (bus stop, subway, etc.)
+            Note that i am using 0.0042 intead of 0.000042
+        """
 
-        # if len(util.Util().Subways) == 0:
-        #     util.Util().set_Subways()
-        # print util.Util().Subways is util.Util().Subways
-        # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
-        # print subways
-        # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
-        # ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
-        # pt = np.array([xcord_self, ycord_self])
-        #
-        # def distances(a):
-        #     return np.linalg.norm(a-pt)
-        #
-        # vfunc = np.vectorize(distances)
-        # # print(distances(subways[0], np.array([xcord_self, ycord_self])))
-        # data = np.array([np.linalg.norm(a-pt) for a in subways])
+        if not isinstance(util.Util().Subways, spatial.ckdtree.cKDTree):
+            util.Util().set_Subways()
+        if not isinstance(util.Util().Busses, spatial.ckdtree.cKDTree):
+            util.Util().set_Busses()
 
-        # print(data[:10])
-        # ans = np.where( data < 100  )
-        # print(len(data))
-        # return 1
-        pass
+        pt = [self.location[0], self.location[1]]
+
+        subways = util.Util().Subways
+        transit = len(subways.query_ball_point(pt, 0.0042, 2))
+
+        busses = util.Util().Busses
+
+        transit += len(busses.query_ball_point(pt, 0.0042, 2))
+        return transit
+
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
