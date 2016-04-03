@@ -6,14 +6,22 @@
   <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
   <script src='jquery-1.12.2.min.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
-
+  <link href="nouislider.min.css" rel="stylesheet">
   <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
   <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,300italic,300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic,300italic,300,200italic,200,100italic,100' rel='stylesheet' type='text/css'>
   <style>
-    body { margin:0; padding:0; }
-    .map { position:absolute; top:0; bottom:0; width:100%; }
+    body { margin:0; padding:0; font-family: 'Raleway'}
+    #map-container {
+      width: 960px;
+      margin: 0 auto;
+    }
+    .map {
+      position:relative; top:0; bottom:0; width: 100%; height:800px;
+      margin: 20px 0px;
+    }
     .redcluster {
       width: 60px;
       height: 60px;
@@ -42,11 +50,95 @@
       position: relative;
       top: 15px;
     }
+    h1 {
+      font-weight: bold;
+      font-size: 40px;
+    }
+    h2 {
+      font-size: 18px;
+      display: inline;
+    }
+    #raw-data {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    #slider-range {
+      width: 300px;
+      margin-bottom: 20px;
+    }
+    em {
+      font-weight: 300;
+      font-size: 24px;
+    }
+    small {
+      font-size: 12px;
+    }
+    h3 {
+      font-size: 12px;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+    .red {
+      color: rgba(149,53,50, 0.7);
+    }
+    .blue {
+      color: rgba(68,198,248, 0.7);
+    }
   </style>
 </head>
 <body>
-<div id='map' class='map'> </div>
+<div id='map-container'>
+  <h1>nyRack <em>\ˈe-nēˈrak\</em></h1>
+  <div id="slider-range"></div>
+  <h2>Displaying </h2><h2 id="slider-range-value"></h2><h2> optimized new bike rack site(s)</h2>
+  <div id='map' class='map'></div>
+  <h3 class="red">Optimized new locations</h3>
+  <h3 class="blue">Already installed locations</h3>
+  <br/>
+  <br/>
+  <h2>Raw data:</h2>
+  <div id='raw-data'></div>
+  <p><small>Made with &#x1F49F; by Raymond Jacobson, Nick Koulopoulos, Joey Lee</small></p>
+</div>
+<script src="nouislider.min.js"></script>
 <script>
+
+var selectedMarkerList = [];
+
+var rangeSlider = document.getElementById('slider-range');
+
+noUiSlider.create(rangeSlider, {
+	start: [ 20 ],
+	range: {
+		'min': [  1 ],
+		'max': [ 1000 ]
+	}
+});
+
+var rangeSliderValueElement = document.getElementById('slider-range-value');
+
+rangeSlider.noUiSlider.on('update', function( values, handle ) {
+  for (var i=0; i<selectedMarkerList.length; ++i) {
+    map.removeLayer(selectedMarkerList[i]);
+  }
+
+  var k = Math.round(values[handle]);
+	rangeSliderValueElement.innerHTML = k;
+  var n = 5000;
+
+  var queryString = "http://localhost:5000/k?";
+  queryString += ("k=" + (k.toString()));
+  queryString += ("n=" + (n.toString()));
+
+  $.getJSON(queryString, function(data) {
+    for (var i=0; i<data.length; ++i) {
+      addMarker(data[i], "#C97880");
+    }
+    $('#raw-data').html(data);
+  });
+});
+
 L.mapbox.accessToken = 'pk.eyJ1IjoicmF5bW9uZGphY29ic29uIiwiYSI6IlVlWnVITTQifQ.lzpdThXgyxuWTS2WQBTqVg';
 
 var map = L.mapbox.map('map', 'mapbox.light')
@@ -64,6 +156,7 @@ function addMarker(latlong, color) {
         'marker-color': color
       })
   });
+  selectedMarkerList.push(marker);
   marker.addTo(map);
 }
 
@@ -82,7 +175,6 @@ $.getJSON("http://localhost:5000/existing", function(data) {
   }
 });
 
-//
 // $.getJSON("http://localhost:5000/new", function(data) {
 //   for (var i=0; i<data.length; ++i) {
 //     addMarker(data[i], "#44c6f8");
@@ -94,12 +186,6 @@ $.getJSON("http://localhost:5000/existing", function(data) {
 //     addMarker(data[i], "#44c6f8");
 //   }
 // });
-
-$.getJSON("http://localhost:5000/k?k=5&n=5", function(data) {
-  for (var i=0; i<data.length; ++i) {
-    addMarker(data[i], "#C97880");
-  }
-});
 
 map.addLayer(markers);
 
