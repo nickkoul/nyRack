@@ -1,6 +1,7 @@
 import math
 import requests
 import foursquare
+import util
 
 class Node:
     def __init__(self, location, does_exist):
@@ -77,6 +78,12 @@ class Node:
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
+        # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
+        # if(len(util.Subways) == 0):
+        #     util.set_Subways()
+        # else:
+        #     print("was changed!")
+
         # subwayStops = {}
         # with open('data/transit/subway/stops.txt') as fp:
         #     for line in fp:
