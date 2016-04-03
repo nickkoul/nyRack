@@ -83,6 +83,15 @@ def read_exisiting_nodes():
 
     return existing_nodes
 
+def get_k_new_stations(k, n):
+    """Gets k new stations, chosing from n points"""
+    # get new points
+    # Loop thru n new points
+    # classify n new points
+    # select k max of new points
+    # make node of each and return list of nodes
+    return [node.Node((-73.9808623, 40.7587442), True)]
+
 if __name__ == '__main__':
 
     # Should be 509 citibikes

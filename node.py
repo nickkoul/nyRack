@@ -23,12 +23,12 @@ class Node:
             - Nearby modes of transportation
             - Large summed distance of nearest N racks
         """
-        #feature_nearby_accident = self.get_nearby_accidents()
-        feature_nearby_venues = self.get_nearby_venues()
-        feature_pedestrian_flow = self.get_pedestrian_flow()
-        feature_biking_popularity = self.get_biking_popularity()
-        feature_nearby_transportation = self.get_nearby_transportation()
-        feature_average_rack_distance = self.get_average_rack_distance()
+        self.feature_nearby_accident = self.get_nearby_accidents()
+        self.feature_nearby_venues = self.get_nearby_venues()
+        self.feature_pedestrian_flow = self.get_pedestrian_flow()
+        self.feature_biking_popularity = self.get_biking_popularity()
+        self.feature_nearby_transportation = self.get_nearby_transportation()
+        self.feature_average_rack_distance = self.get_average_rack_distance()
 
     def get_nearby_accidents(self,accident_cords,paccident_results):
         """Gets nearby accidents"""
@@ -84,7 +84,12 @@ class Node:
 
     def get_nearby_transportation(self):
         """Gets the nearby transportation (bus stop, subway, etc.)"""
+
+        if len(util.Util().Subways) == 0:
+            util.Util().set_Subways()
+        print util.Util().Subways is util.Util().Subways
         # subways = util.Subways if (len(util.Subways) != 0) else util.set_Subways()
+        # print subways
         # xcord_self = (6371*1000)*math.cos((self.location[0]*2*math.pi)/float(360))
         # ycord_self = (6371*1000)*math.sin((self.location[1]*2*math.pi)/float(360))
         # pt = np.array([xcord_self, ycord_self])
@@ -95,11 +100,22 @@ class Node:
         # vfunc = np.vectorize(distances)
         # # print(distances(subways[0], np.array([xcord_self, ycord_self])))
         # data = np.array([np.linalg.norm(a-pt) for a in subways])
-        # # print(data[:10])
-        # # ans = np.where( data < 100  )
-        # # print(len(data))
-        # # return 1
+
+        # print(data[:10])
+        # ans = np.where( data < 100  )
+        # print(len(data))
+        # return 1
         pass
 
     def get_average_rack_distance(self):
         """Gets the average distance to closest 4 racks"""
+
+
+if __name__ == '__main__':
+    n = Node((-73.9808623, 40.7587442), True)
+    print n.get_nearby_accidents()
+    print n.get_nearby_venues()
+    print n.get_pedestrian_flow()
+    print n.get_nearby_transportation()
+    print n.get_biking_popularity()
+    print n.get_average_rack_distance()

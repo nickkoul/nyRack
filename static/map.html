@@ -6,17 +6,45 @@
   <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
   <script src='jquery-1.12.2.min.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
+
+  <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+  <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,300italic,300' rel='stylesheet' type='text/css'>
   <style>
     body { margin:0; padding:0; }
     .map { position:absolute; top:0; bottom:0; width:100%; }
+    .redcluster {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(149,53,50,0.5);
+      border: 3px solid rgba(149,53,50,0.8);
+      border-radius: 30px;
+      text-align: center;
+      font-size: 18px;
+      color: #333333;
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+    }
+    .bluecluster {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(68,198,248,0.5);
+      border: 3px solid rgba(68,198,248,0.3);
+      border-radius: 30px;
+      text-align: center;
+      font-size: 18px;
+      color: #333333;
+    }
+    b {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      position: relative;
+      top: 15px;
+    }
   </style>
 </head>
 <body>
-
-<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
-
 <div id='map' class='map'> </div>
 <script>
 L.mapbox.accessToken = 'pk.eyJ1IjoicmF5bW9uZGphY29ic29uIiwiYSI6IlVlWnVITTQifQ.lzpdThXgyxuWTS2WQBTqVg';
@@ -24,9 +52,22 @@ L.mapbox.accessToken = 'pk.eyJ1IjoicmF5bW9uZGphY29ic29uIiwiYSI6IlVlWnVITTQifQ.lz
 var map = L.mapbox.map('map', 'mapbox.light')
   .setView([40.7587442, -73.9808623], 13);
 
-var markers = new L.MarkerClusterGroup();
+var markers = L.markerClusterGroup({
+  iconCreateFunction: function (cluster) {
+    return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>', className: 'bluecluster', iconSize: L.point(60, 60) });
+  }
+});
 
 function addMarker(latlong, color) {
+  var marker = L.marker(latlong, {
+      icon: L.mapbox.marker.icon({
+        'marker-color': color
+      })
+  });
+  marker.addTo(map);
+}
+
+function addMarkerToClusters(latlong, color) {
   var marker = L.marker(latlong, {
       icon: L.mapbox.marker.icon({
         'marker-color': color
@@ -35,11 +76,12 @@ function addMarker(latlong, color) {
   markers.addLayer(marker);
 }
 
-// $.getJSON("http://localhost:5000/existing", function(data) {
-//   for (var i=0; i<data.length; ++i) {
-//     addMarker(data[i], "#44c6f8");
-//   }
-// });
+$.getJSON("http://localhost:5000/existing", function(data) {
+  for (var i=0; i<data.length; ++i) {
+    addMarkerToClusters(data[i], "#44c6f8");
+  }
+});
+
 //
 // $.getJSON("http://localhost:5000/new", function(data) {
 //   for (var i=0; i<data.length; ++i) {
@@ -47,9 +89,15 @@ function addMarker(latlong, color) {
 //   }
 // });
 
-$.getJSON("http://localhost:5000/citibike", function(data) {
+// $.getJSON("http://localhost:5000/citibike", function(data) {
+//   for (var i=0; i<data.length; ++i) {
+//     addMarker(data[i], "#44c6f8");
+//   }
+// });
+
+$.getJSON("http://localhost:5000/k?k=5&n=5", function(data) {
   for (var i=0; i<data.length; ++i) {
-    addMarker(data[i], "#44c6f8");
+    addMarker(data[i], "#C97880");
   }
 });
 

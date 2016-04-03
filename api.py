@@ -28,10 +28,14 @@ def get_existing():
                                             node.location[0]), existing_nodes))
     return json.dumps(existing_nodes)
 
-@app.route('/selections', methods=['GET'])
-def get_selections():
+@app.route('/k', methods=['GET'])
+def k():
     k = request.args.get('k')
-    return json.dumps({'data': 5})
+    n = request.args.get('n')
+    k_new_nodes = main.get_k_new_stations(k, n)
+    k_new_nodes = list(map(lambda node: (node.location[1],
+                                         node.location[0]), k_new_nodes))
+    return json.dumps(k_new_nodes)
 
 if __name__ == '__main__':
     app.run(debug=True)
