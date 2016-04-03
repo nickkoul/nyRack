@@ -31,9 +31,10 @@ def get_existing():
 @app.route('/k', methods=['GET'])
 def k():
     k = request.args.get('k')
-    k_new_nodes = main.get_k_new_stations(k)
+    n = request.args.get('n')
+    k_new_nodes = main.get_k_new_stations(k, n)
     k_new_nodes = list(map(lambda node: (node.location[1],
-                                         node.location[0]), new_nodes))
+                                         node.location[0]), k_new_nodes))
     return json.dumps(k_new_nodes)
 
 if __name__ == '__main__':
