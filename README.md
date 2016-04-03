@@ -10,12 +10,12 @@ Special Thanks to Rensselaer Polynic Institute 2nd annual Lally Business Analyti
 
 ## Dependencies
 Need Foursquare module for python  
-'pip install foursquare'
-'pip install sklearn'
-'pip install googlemaps'
-'pip install scipy'
-'pip install numpy'
-'pip install flask'
+'pip install foursquare'   
+'pip install sklearn'   
+'pip install googlemaps'   
+'pip install scipy'   
+'pip install numpy'   
+'pip install flask'   
 
 ## Running
 To build the pkl file with the svm model run: 'python learn.py'   
