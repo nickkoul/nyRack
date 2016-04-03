@@ -5,6 +5,7 @@ import math
 import numpy as np
 import random
 import util
+from operator import attrgetter
 
 def get_citiBike_stations():
     """ Parse citibike data into nodes w/ features and value  """
@@ -112,7 +113,7 @@ def get_k_new_stations(n):
     for node in n_nodes:
         node.calculate_desireability_score()
     print("desirability sorted")
-    sorted(n_nodes,key=attrgetter('desireability_score',reverse=True))
+    sorted(n_nodes,key=attrgetter('desireability_score'),reverse=True)
 
     # select k max of new points
     # k_nodes=[]

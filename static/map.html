@@ -98,13 +98,16 @@
   <br/>
   <br/>
   <h2>Raw data:</h2>
-  <div id='raw-data'></div>
+  <p id='raw-data'></p>
   <p><small>Made with &#x1F49F; by Raymond Jacobson, Nick Koulopoulos, Joey Lee</small></p>
 </div>
 <script src="nouislider.min.js"></script>
 <script>
 
 var n = 100;
+
+var discovered = false;
+var discovered_data;
 
 var selectedMarkerList = [];
 
@@ -124,20 +127,28 @@ rangeSlider.noUiSlider.on('update', function( values, handle ) {
   for (var i=0; i<selectedMarkerList.length; ++i) {
     map.removeLayer(selectedMarkerList[i]);
   }
-
   var k = Math.round(values[handle]);
-	rangeSliderValueElement.innerHTML = k;
+  rangeSliderValueElement.innerHTML = k;
+  if (!discovered) {
 
-  var queryString = "http://localhost:5000/k?";
-  queryString += ("k=" + (k.toString()));
-  queryString += ("&n=" + (n.toString()));
+    var queryString = "http://localhost:5000/k?";
+    queryString += ("k=" + (k.toString()));
+    queryString += ("&n=" + (n.toString()));
 
-  $.getJSON(queryString, function(data) {
+    $.getJSON(queryString, function(data) {
+      for (var i=0; i<k; ++i) {
+        addMarker(data[i], "#C97880");
+      }
+      $('#raw-data').html(JSON.stringify(data.slice(0, k)));
+      discovered_data = data
+      discovered = true;
+    });
+  } else {
     for (var i=0; i<k; ++i) {
-      addMarker(data[i], "#C97880");
+      addMarker(discovered_data[i], "#C97880");
     }
-    $('#raw-data').html(data);
-  });
+    $('#raw-data').html(JSON.stringify(discovered_data.slice(0,k)));
+  }
 });
 
 L.mapbox.accessToken = 'pk.eyJ1IjoicmF5bW9uZGphY29ic29uIiwiYSI6IlVlWnVITTQifQ.lzpdThXgyxuWTS2WQBTqVg';
